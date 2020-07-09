@@ -1,8 +1,23 @@
 Class {
 	#name : #PMPolynomialTest,
 	#superclass : #TestCase,
-	#category : 'Math-Tests-Polynomials'
+	#category : #'Math-Tests-Polynomials'
 }
+
+{ #category : #test }
+PMPolynomialTest >> testDeflatedAt [
+	|  aPMPolynomial |
+	aPMPolynomial := (PMPolynomial coefficients: #(2 -3 1))
+		deflatedAt: -2.0.
+	self assert: aPMPolynomial coefficients equals: #(-5.0 1.0)
+]
+
+{ #category : #test }
+PMPolynomialTest >> testHash [
+	| anInteger |
+	anInteger := (PMPolynomial coefficients: #(2 -3 1)) hash.
+	self assert: anInteger equals: 116289460
+]
 
 { #category : #comparing }
 PMPolynomialTest >> testIsZero [
@@ -261,4 +276,21 @@ PMPolynomialTest >> testPolynomialSubtraction [
 	self assert: (polynomial at: 2) equals: -1.
 	self assert: (polynomial at: 3) equals: -1.
 	self assert: (polynomial at: 4) equals: 0
+]
+
+{ #category : #test }
+PMPolynomialTest >> testReciprocal [
+	| aPMPolynomial |
+	aPMPolynomial := PMPolynomial new.
+	self should: [ aPMPolynomial reciprocal ] raise: ZeroDivide.
+	aPMPolynomial := PMPolynomial coefficients: #(2 -3 1).
+	self assert: aPMPolynomial reciprocal class equals: PMPolynomial
+]
+
+{ #category : #test }
+PMPolynomialTest >> testValue [
+	| aPMPolynomial aNumber |
+	aPMPolynomial := PMPolynomial coefficients: #(2 -3 1).
+	aNumber := aPMPolynomial value: -2.0.
+	self assert: aNumber equals: 12.0
 ]

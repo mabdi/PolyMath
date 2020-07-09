@@ -28,6 +28,13 @@ PMSimpleParameterFunctionTest >> testParameterNames [
 ]
 
 { #category : #tests }
+PMSimpleParameterFunctionTest >> testParameters [
+	| s |
+	s := PMSimpleParameterFunction function: f.
+	self assert: s parameters equals: #(0.937 0.929 0.919)
+]
+
+{ #category : #tests }
 PMSimpleParameterFunctionTest >> testPrint [
 |aStream s|
 aStream :=ReadWriteStream with:''.
@@ -47,6 +54,7 @@ PMSimpleParameterFunctionTest >> testRest [
 	s := PMSimpleParameterFunction function: f.
 	self assert: s parameters size equals: 3.
 	vg := s valueAndGradient: 2.
+	self should: [ s parameters: #() ] raise: SubscriptOutOfBounds.
 	self assert: s parameters first equals: vg first.
 	self assert: (vg second equalsTo: #(1 0 0)).
 	s parameters: #(2 0 0).

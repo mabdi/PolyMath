@@ -8,6 +8,19 @@ Class {
 }
 
 { #category : #tests }
+PMBernoulliGeneratorTest >> testInvalidProbability [
+	self
+		should: [ PMBernoulliGenerator withProbability: 2 ]
+		raise: AssertionFailure.
+	self
+		should: [ PMBernoulliGenerator withProbability: SmallInteger maxVal ]
+		raise: AssertionFailure.
+	self
+		should: [ PMBernoulliGenerator withProbability: SmallInteger minVal ]
+		raise: AssertionFailure
+]
+
+{ #category : #tests }
 PMBernoulliGeneratorTest >> testNextYieldsOneOrZero [
 	| gen |
 	gen := PMBernoulliGenerator fair.

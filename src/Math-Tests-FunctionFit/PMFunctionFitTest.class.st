@@ -18,6 +18,8 @@ d:=(1 to: 20)collect: [:i|i@(f cull: i cull: 2 cull: 0.4) ].
 PMFunctionFitTest >> testFunctionFit [
 	| ff ar p |
 	ff := PMFunctionFit function: f data: d.
+	self assert: ff chiSquare equals: 27.565054663919746.
+	self should: [ ff computeChanges ] raise: PMSingularMatrixError.
 	ar := ff parameters.
 	ar
 		do: [ :i | 

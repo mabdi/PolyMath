@@ -1,7 +1,7 @@
 Class {
 	#name : #PMSymmetricMatrixTest,
 	#superclass : #TestCase,
-	#category : 'Math-Tests-Matrix'
+	#category : #'Math-Tests-Matrix'
 }
 
 { #category : #tests }
@@ -14,6 +14,13 @@ PMSymmetricMatrixTest >> testCrlInverse [
 a PMVector(1 0 -24)
 a PMVector(0 1 -40)
 a PMVector(2 4 -51)"
+]
+
+{ #category : #tests }
+PMSymmetricMatrixTest >> testEigen [
+	| m  |
+	m := PMSymmetricMatrix rows: #(#(2 2 3) #(0 4 5) #(3 5 6)).
+	self assert: m eigen class equals: PMJacobiTransformationHelper
 ]
 
 { #category : #tests }
@@ -48,4 +55,15 @@ PMSymmetricMatrixTest >> testInversePureLUP [
 	"there is no(!) bug in inversePureCRL, but it is nowhere tested i think, hence i just added this here for the sake of simplicity (and because i simplified inversePureCRL)"
 	i := m inversePureCRL.
 	self assert: m * i equals: (PMSymmetricMatrix identity: 3)
+]
+
+{ #category : #tests }
+PMSymmetricMatrixTest >> testInversePureLUPError [
+	| m |
+	m := PMSymmetricMatrix rows: #(#(2 2 2) #(2 4 5) #(3 5 6)).
+	self should: [ m inversePureLUP ] raise: PMSingularMatrixError.
+	m := PMSymmetricMatrix rows: #(#(2 2 3) #(0 0 0) #(3 5 6)).
+	self should: [ m inversePureLUP ] raise: PMSingularMatrixError.
+	m := PMSymmetricMatrix rows: #(#(2 4 3) #(2 4 5) #(3 5 6)).
+	self should: [ m crlInverse ] raise: PMSingularMatrixError
 ]

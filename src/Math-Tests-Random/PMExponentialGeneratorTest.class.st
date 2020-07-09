@@ -11,11 +11,13 @@ Class {
 PMExponentialGeneratorTest >> testGenerator [
 	| eg |
 	eg := PMExponentialGenerator new.
+	self assert: eg mean equals: 1.
 	self
 		assert: (eg generator isKindOf: PMExponentialGenerator defaultGeneratorClass).
 	self assert: (eg generator isKindOf: PMPseudoRandomNumberGenerator).
 	eg generator: PMMersenneTwisterRandomGenerator new.
-	self assert: (eg generator isKindOf: PMMersenneTwisterRandomGenerator).
+	self
+		assert: (eg generator isKindOf: PMMersenneTwisterRandomGenerator).
 	self assert: (eg next isKindOf: Number)
 ]
 

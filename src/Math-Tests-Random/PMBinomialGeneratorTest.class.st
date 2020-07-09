@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : #tests }
+PMBinomialGeneratorTest >> testBinomialGeneratorDefault [
+	| g |
+	g := PMBinomialGenerator new.
+	self assert: g expectedValue equals: 5.0
+]
+
+{ #category : #tests }
 PMBinomialGeneratorTest >> testBinomialGeneratorWithSuccessProbabilityOfOneAlwaysReturnNumberOfTrials [
 	| g numberOfTrials |
 	g := PMBinomialGenerator new.

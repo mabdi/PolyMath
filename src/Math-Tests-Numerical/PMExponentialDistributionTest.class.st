@@ -12,6 +12,9 @@ PMExponentialDistributionTest >> testSampleMeanConvergesToDistributionMean [
 	"testing a random sample seems suspect. We use a 5% interval here"
 
 	| eg arr |
+	self
+		should: [ PMExponentialDistribution scale: SmallInteger minVal ]
+		raise: Error.
 	eg := PMExponentialDistribution scale: 10.
 	arr := Array new: 10000.
 	(1 to: 10000) do: [ :index | arr at: index put: eg random ].

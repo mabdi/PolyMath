@@ -23,7 +23,6 @@ PMGaussianGeneratorTest >> testSampleMeanAndStandardDeviationConvergeToDistribut
 		standardDeviation: standardDeviation;
 		generator: PMLinearCongruentialRandomGenerator new.
 	g generator seed: 42.
-
 	self
 		assertSampleGeneratedBy: g
 		convergesToExpectedValue: mean
@@ -34,6 +33,7 @@ PMGaussianGeneratorTest >> testSampleMeanAndStandardDeviationConvergeToDistribut
 	g
 		mean: mean;
 		standardDeviation: standardDeviation.
+	self assert: g generator peekSeed equals: 79613.
 	self
 		assertSampleGeneratedBy: g
 		convergesToExpectedValue: mean

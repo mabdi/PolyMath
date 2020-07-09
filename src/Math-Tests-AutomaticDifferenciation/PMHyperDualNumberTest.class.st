@@ -108,7 +108,19 @@ PMHyperDualNumberTest >> testArcSin [
 	self assert: (a value equalsTo: Float halfPi).
 	self assert: a eps > 1e6.
 	self assert: a eps2 > 1e6.
-	self assert: a eps1eps2 > 1e6
+	self assert: a eps1eps2 > 1e6.
+	self
+		assert: a asString
+		equals:
+			'PMHyperDualNumber(value: 1.5707963118937354 eps1: 6.7108864e7 eps2: 6.7108864e7 eps12: 3.0223145490365612e23)'.
+	self
+		assert: (PMHyperDualNumber
+		value: 1.0 predecessor
+		eps: 1
+		eps2: 1
+		eps1eps2: SmallInteger maxVal) arcSin asString
+		equals:
+			'PMHyperDualNumber(value: 1.5707963118937354 eps1: 6.7108864e7 eps2: 6.7108864e7 eps12: 7.767348391023992e25)'
 ]
 
 { #category : #'tests-mathematical functions' }
@@ -123,7 +135,13 @@ PMHyperDualNumberTest >> testArcTan [
 				eps2: -1 / 2
 				eps1eps2: 1 / 2).
 	self assert: (three arcTan eps2 equalsTo: 0.1).
-	self assert: (three arcTan eps1eps2 equalsTo: -3 / 50)
+	self assert: (three arcTan eps1eps2 equalsTo: -3 / 50).
+	self
+		assert: (three
+		eps1eps2: -4;
+		arcTan) asString
+		equals:
+			'PMHyperDualNumber(value: 1.2490457723982544 eps1: (1/10) eps2: (1/10) eps12: (-23/50))'
 ]
 
 { #category : #tests }

@@ -52,6 +52,38 @@ PMTrapezoidStepperTest >> testDoStepTimeStepSize2 [
 		assert: ((stepper doStep: 10 time: 1 stepSize: dt) closeTo: 9.7109)
 ]
 
+{ #category : #test }
+PMTrapezoidStepperTest >> testLastStepTimeDeltaT [
+	| stepper sys dt aCollection |
+	sys := PMImplicitSystem block: [ :x :t | x * t ].
+	stepper := PMTrapezoidStepper onSystem: sys.
+	dt := 0.1.
+	aCollection := stepper
+	stepSize: dt;
+		lastStep: #(0.9999820650436637 0.0015926396443576851)
+		time: 1.57
+		deltaT: 0.01.
+	self
+		assert: aCollection
+		equals: #(1.1709013365590129 0.0018648573343701496)
+]
+
+{ #category : #test }
+PMTrapezoidStepperTest >> testLastStepTimeStepSizeDeltaT [
+	| stepper sys aCollection |
+	sys := PMImplicitSystem block: [ :x :t | x * t ].
+	stepper := PMTrapezoidStepper onSystem: sys.
+	aCollection := stepper
+		lastStep: #(-0.0008046534218888145 0.9999913495872547)
+		time: 3.1399999999999997
+		stepSize: 0.0015926535897934357
+		deltaT: 0.01.
+	self
+		assert: aCollection
+		equals: #(-0.000808693982181293 1.0050127976169911).
+
+]
+
 { #category : #'tests-stepping' }
 PMTrapezoidStepperTest >> testOrderIsTwo [
 	self assert: PMTrapezoidStepper order equals: 2

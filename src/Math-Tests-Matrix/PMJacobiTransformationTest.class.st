@@ -26,7 +26,10 @@ PMJacobiTransformationTest >> testEigenvectorsOfIdentityMatrixAreTheUnitVectors 
 	jacobiTransform := PMJacobiTransformation matrix: identityMatrix.
 	
 	matrixOfEigenvectors := jacobiTransform transform.
+	self should: [ jacobiTransform sortEigenValues ] raise: Error.
 	
 	expected := PMSymmetricMatrix identity: 2.
 	self assert: matrixOfEigenvectors equals: expected.
+	jacobiTransform finalizeIterations.
+	self assert: jacobiTransform transform determinant equals: -1
 ]

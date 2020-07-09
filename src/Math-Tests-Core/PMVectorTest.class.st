@@ -79,7 +79,7 @@ PMVectorTest >> testLessThan [
 	self assert: vec equals: vecCopy asPMVector.
 ]
 
-{ #category : #tests } 
+{ #category : #tests }
 PMVectorTest >> testMatrixConversionWithBothDims [
 	| vect result expected |
 	vect := #(1 0.5 0.2 3 1 -1 7 3 2 12 13 3) asPMVector .
@@ -154,6 +154,14 @@ PMVectorTest >> testSubtractScalar [
 	self assert: actual equals: expected.
 ]
 
+{ #category : #test }
+PMVectorTest >> testTanh [
+	| a aCollection |
+	a := #(1 2 3) asPMVector.
+	aCollection := a tanh.
+	self assert: aCollection class equals: PMVector
+]
+
 { #category : #tests }
 PMVectorTest >> testTensorProduct [
 	| a b c |
@@ -223,6 +231,26 @@ PMVectorTest >> testVectorHadamardProduct [
 	self assert: (w at: 1) equals: 3.
 	self assert: (w at: 2) equals: 8.
 	self assert: (w at: 3) equals: 15
+]
+
+{ #category : #tests }
+PMVectorTest >> testVectorHouseholder [
+	| u w |
+	u := #(-1 0 1) asPMVector.
+	w := u householder.
+	self
+		assert: w class equals: Array;
+		assert: (w at: 1) equals: 1.7071067811865475;
+		assert: (w at: 2) asArray equals: #(1.0 -0.0 -0.4142135623730951).
+	u := #(1.00001 2.00007) asPMVector.
+	w := u
+		closeTo: #(1.00007 2.00001) asPMVector;
+		householder.
+	self
+		assert: w class equals: Array;
+		assert: (w at: 1) equals: 0.5527953485259909;
+		assert: (w at: 2) asArray
+			equals: #(1.0 -1.6180158992689828)
 ]
 
 { #category : #tests }

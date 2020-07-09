@@ -1,7 +1,7 @@
 Class {
 	#name : #PMMatrixTest,
 	#superclass : #TestCase,
-	#category : 'Math-Tests-Matrix'
+	#category : #'Math-Tests-Matrix'
 }
 
 { #category : #tests }
@@ -66,6 +66,20 @@ PMMatrixTest >> testCollect [
 	self assert: ((PMMatrix rows: #((1 2) (3 4))) collect: [ :x | 2 * x ]) equals: (PMMatrix rows: #((2 4) ( 6 8)))
 ]
 
+{ #category : #tests }
+PMMatrixTest >> testCosh [
+	| a |
+	a := PMMatrix rows: #(#(1 0 1) #(-1 -2 3)).
+	self assert: a cosh class equals: PMMatrix
+]
+
+{ #category : #tests }
+PMMatrixTest >> testDecompose [
+	| a |
+	a := PMMatrix rows: #(#(11 12 13) #(21 22 23)).
+	self assert: a decompose class equals: PMSingularValueDecomposition
+]
+
 { #category : #'linear algebra' }
 PMMatrixTest >> testDeterminant [
 	| m |
@@ -79,6 +93,13 @@ PMMatrixTest >> testDimension [
 	a := PMMatrix rows: #( ( 1 0 1) (-1 -2 3)).	
 	self assert: a dimension equals: 2@3.
 	
+]
+
+{ #category : #tests }
+PMMatrixTest >> testEigen [
+	| a c |
+	a := PMMatrix rows: #(#(11 12 13) #(21 22 23)).
+	self should: [ a eigen ] raise: Error
 ]
 
 { #category : #'linear algebra' }
@@ -188,6 +209,13 @@ PMMatrixTest >> testLinearEquationsSingular [
 		constant: #(0.1 12.5 10.3).
 	sol := s solution.
 	self assert: sol isNil
+]
+
+{ #category : #tests }
+PMMatrixTest >> testLog [
+	| a  |
+	a := PMMatrix rows: #(#(1 0 1) #(-1 -2 3)).
+	self assert: a log class equals: PMMatrix
 ]
 
 { #category : #'linear algebra' }
@@ -487,6 +515,15 @@ PMMatrixTest >> testMatrixTrace [
 ]
 
 { #category : #tests }
+PMMatrixTest >> testMpInverse [
+	| a |
+	a := (PMMatrix rows: #(#(6 8 10) #(18 14 4))) transpose mpInverse.
+	self
+		assert: a class equals: PMMatrix;
+		assert: a determinant equals: -0.0015151515151515152
+]
+
+{ #category : #tests }
 PMMatrixTest >> testOnesMatrix [
 	| a |
 	a := PMMatrix onesRows: 2 cols: 3.
@@ -501,11 +538,70 @@ PMMatrixTest >> testOnesMatrix [
 ]
 
 { #category : #tests }
+PMMatrixTest >> testOrthogonalize [
+	| a aPMMatrix |
+	a := PMMatrix rows: #(#(11 12 13) #(21 22 23)).
+	self should: [ a orthogonalize ] raise: Error.
+	a := PMMatrix rows: #(#(3 2 4) #(2 -5 -1) #(1 -2 2)).
+	
+	aPMMatrix := a inverse orthogonalize.
+	self assert: aPMMatrix class equals: PMMatrix.
+	
+]
+
+{ #category : #tests }
+PMMatrixTest >> testPrincipalDiagonal [
+	| a |
+	a := PMMatrix rows: #(#(1 0 1) #(-1 -2 3)).
+	self should: [ a principalDiagonal ] raise: Error
+]
+
+{ #category : #tests }
 PMMatrixTest >> testPrintOn [
 	| m stream |
 	stream := String new writeStream.
 	m := PMMatrix new.
 	m printOn: stream
+]
+
+{ #category : #tests }
+PMMatrixTest >> testQrFactorization [
+	| aPMMatrix aCollection |
+	aPMMatrix := PMMatrix rows: #(#(1.00001 2.00002) #(3.00001 4.00002)).
+	aCollection := aPMMatrix qrFactorization.
+	self
+		assert: (aCollection at: 1) determinant
+		equals: -1.0000000000000004.
+	aPMMatrix := PMMatrix rows: #(#(6 8 10) #(18 14 4)).
+	
+	aCollection := aPMMatrix transpose qrFactorization.
+	self
+		assert: aCollection class equals: Array;
+		assert: (aCollection at: 1) determinant equals: 0
+]
+
+{ #category : #tests }
+PMMatrixTest >> testQrFactorizationWithPivoting [
+	| aPMMatrix aCollection |
+	aPMMatrix := PMMatrix rows: #(#(11 12 13) #(12 22 23) #(13 23 33)).
+	aCollection := aPMMatrix
+		qrFactorizationWithPivoting.
+	self
+		assert: (aCollection at: 1) determinant
+		equals: 1.0000000000000007.
+	
+]
+
+{ #category : #tests }
+PMMatrixTest >> testRank [
+	| aPMMatrix |
+	aPMMatrix := PMMatrix rows: #(#(1.00001 2.00002) #(3.00001 4.00002)).
+	self assert: aPMMatrix rank equals: 2.
+	aPMMatrix := PMMatrix rows: #(#(1 2 3) #(1 2 3) #(1 2 3)).
+	aPMMatrix 
+		rowsDo: [ :row | row at: 1 put: 0 ];
+		columnsDo: [ :col | aPMMatrix atRow: 1 put: col ].
+	self assert: aPMMatrix rank equals: 2
 ]
 
 { #category : #comparing }
@@ -579,6 +675,13 @@ PMMatrixTest >> testSimpleMatrixOperations [
 	self assert: m transpose * m equals: m squared
 ]
 
+{ #category : #tests }
+PMMatrixTest >> testSin [
+	| a |
+	a := PMMatrix rows: #(#(1 0 1) #(-1 -2 3)).
+	self assert: a sin class equals: PMMatrix
+]
+
 { #category : #'linear algebra' }
 PMMatrixTest >> testSingularMatrixError [
 |h f|
@@ -593,6 +696,14 @@ self should: [ f errorMatrix ] raise: PMSingularMatrixError .
 self should: [(PMMatrix rows: #((1 2 3)(3 4 6)))inverse] raise: PMSingularMatrixError .
 self should: [(PMSymmetricMatrix rows: #((1 2 3)(2 2 2)(3 2 1)))inversePureLUP] raise: PMSingularMatrixError.
 self should: [(PMSymmetricMatrix rows: #((1 2 3)(2 2 2)(3 2 1)))inversePureCRL] raise: PMSingularMatrixError.
+]
+
+{ #category : #tests }
+PMMatrixTest >> testSinh [
+	| a aPMMatrix |
+	a := PMMatrix rows: #(#(11 12 13) #(21 22 23)).
+	aPMMatrix := a sinh.
+	self assert: aPMMatrix class equals: PMMatrix
 ]
 
 { #category : #tests }
@@ -673,6 +784,22 @@ PMMatrixTest >> testSymmetricMatrixAdd3 [
 ]
 
 { #category : #tests }
+PMMatrixTest >> testTan [
+	| a |
+	a := PMMatrix rows: #(#(1 0 1) #(-1 -2 3)).
+	self assert: a tan class equals: PMMatrix
+]
+
+{ #category : #tests }
+PMMatrixTest >> testTanh [
+	| a aPMMatrix |
+	a := PMMatrix rows: #(#(11 12 13) #(21 22 23)).
+	aPMMatrix := a tanh.
+	self assert: aPMMatrix class equals: PMMatrix.
+	
+]
+
+{ #category : #tests }
 PMMatrixTest >> testVectorConversion [
 	| m |
 	m := PMMatrix rows: #(#(1 2 3) #(4 5 6) #(7 8 9)).
@@ -692,6 +819,16 @@ PMMatrixTest >> testVectorMatrixOperation [
 	self assert: (v at: 2) equals: 4
 ]
 
+{ #category : #tests }
+PMMatrixTest >> testVectorTransposeInverseMatrixOperation [
+	| c aPMMatrix2 |
+	c := PMMatrix rows: #(#(6 8 10) #(18 14 4)).
+	aPMMatrix2 := c transpose mpInverse.
+	self
+		assert: aPMMatrix2 class equals: PMMatrix;
+		assert: aPMMatrix2 determinant equals: -0.0015151515151515152
+]
+
 { #category : #'linear algebra' }
 PMMatrixTest >> testVectorTransposeMatrixOperation [
 	"Code Example 8.1"
@@ -704,6 +841,16 @@ PMMatrixTest >> testVectorTransposeMatrixOperation [
 	self assert: (w at: 1) equals: 96.
 	self assert: (w at: 2) equals: 88.
 	self assert: (w at: 3) equals: 56
+]
+
+{ #category : #tests }
+PMMatrixTest >> testVectorTransposeQrFactorizationMatrixOperation [
+	| c aCollection |
+	c := PMMatrix rows: #(#(6 8 10) #(18 14 4)).
+	aCollection := c transpose qrFactorization.
+	self
+		assert: aCollection class equals: Array;
+		assert: (aCollection at: 1) determinant equals: 0
 ]
 
 { #category : #tests }

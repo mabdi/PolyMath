@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'dataServer'
 	],
-	#category : 'Math-Tests-Clustering'
+	#category : #'Math-Tests-Clustering'
 }
 
 { #category : #utils }
@@ -55,6 +55,20 @@ PMClusterFinderTest >> testClusterCovariance [
 	finder minimumRelativeClusterSize: 0.1.
 	clusters := finder evaluate.
 	self assert: clusters size equals: 3
+]
+
+{ #category : #tests }
+PMClusterFinderTest >> testClusterCovarianceNew [
+	| finder |
+	finder := PMClusterFinder
+		new: 5
+		server: dataServer
+		type: PMCovarianceCluster.
+	finder
+		minimumRelativeClusterSize: 0.1;
+		initializeIterations;
+		evaluateIteration.
+	self assert: finder result size equals: 3
 ]
 
 { #category : #tests }

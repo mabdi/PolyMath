@@ -60,6 +60,30 @@ PMFixpointTest >> testCheckForLongerCycles [
 ]
 
 { #category : #tests }
+PMFixpointTest >> testCheckForLongerCycles_amp_L0 [
+	"I test correctness of: 
+
+- `cycleFlag not` in method: `PMFixpoint >> #evaluateIteration` when {#cycleFlag->true}
+
+"
+
+	<madeBySmallAmp>
+	fp := PMFixpoint
+		block: [ :x | 
+			| d |
+			d := x - 2.
+			d < -2
+				ifTrue: [ d := 0.0 ].
+			d ]
+		value: 20.0.
+	fp
+		maximumIterations: 10;
+		value: 11.0;
+		evaluate.
+	self assert: fp precision equals: 0.0
+]
+
+{ #category : #tests }
 PMFixpointTest >> testCheckStrongEquality [
 	fp
 		block: [ :x | 
@@ -84,7 +108,7 @@ PMFixpointTest >> testEqualityTest [
 			d < -2
 				ifTrue: [ d := 2 ].
 			d ].	"can return an Integer!"
-	fp equalityTest: [ :x :y | x = y ].
+	self assert: (fp equalityTest: [ :x :y | x = y ]) class equals: BlockClosure.
 	fp value: 2.0.
 	fp evaluate.
 	self assert: fp cycleLength equals: 5.
